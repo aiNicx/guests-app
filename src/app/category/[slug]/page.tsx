@@ -44,6 +44,10 @@ export default function CategoryDetail() {
     category: category?.name || "",
   });
 
+  // Debug: mostra cosa stiamo cercando e cosa troviamo
+  console.log("Category search:", category?.name);
+  console.log("Subcategories found:", subcategories);
+
   if (!category) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
