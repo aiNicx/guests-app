@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 import Providers from "./providers";
@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Case Vacanza",
   description: "Info utili per gli ospiti",
   manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
   themeColor: "#2563eb",
 };
 

@@ -8,20 +8,38 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
 function useAdminToken() {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(() => {
+    const t = localStorage.getItem("adminToken");
+    const exp = Number(localStorage.getItem("adminTokenExpiresAt") || 0);
+    if (!t || !exp || Date.now() > exp) {
+      return null;
+    }
+    return t;
+  });
+
   useEffect(() => {
     const t = localStorage.getItem("adminToken");
     const exp = Number(localStorage.getItem("adminTokenExpiresAt") || 0);
     if (!t || !exp || Date.now() > exp) {
-      setToken(null);
+      if (token !== null) setToken(null);
     } else {
-      setToken(t);
+      if (token !== t) setToken(t);
     }
-  }, []);
+  }, [token]);
+
   return token;
 }
 
 export default function EditContentPage() {
+  // Stili per i placeholder
+  const placeholderStyle = `
+    input::placeholder,
+    textarea::placeholder,
+    select::placeholder {
+      color: #666; /* Un grigio più scuro per i placeholder */
+      opacity: 1; /* Assicura che il colore sia visibile */
+    }
+  `;
   const params = useParams();
   const router = useRouter();
   const token = useAdminToken();
@@ -114,7 +132,10 @@ export default function EditContentPage() {
         },
         location: {
           address: content.location?.address || "",
-          coordinates: content.location?.coordinates || { lat: 0, lng: 0 },
+          coordinates: {
+            lat: Number(content.location?.coordinates?.lat) || 0,
+            lng: Number(content.location?.coordinates?.lng) || 0,
+          },
           directions: content.location?.directions || "",
         },
         tags: content.tags || [],
@@ -223,12 +244,13 @@ export default function EditContentPage() {
 
   return (
     <main style={{ maxWidth: 800, margin: "20px auto", padding: 16 }}>
+      <style dangerouslySetInnerHTML={{ __html: placeholderStyle }} />
       <header style={{ marginBottom: 24 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h1>Modifica Contenuto</h1>
           <Link href="/admin" style={{ color: "#666" }}>← Torna alla Dashboard</Link>
         </div>
-        <p style={{ color: "#666" }}>
+        <p style={{ color: "#333" }}> {/* Modificato colore testo per p */}
           {content.category} / {content.subcategory}
         </p>
       </header>
@@ -236,8 +258,22 @@ export default function EditContentPage() {
       <form onSubmit={handleSubmit} style={{ display: "grid", gap: 20 }}>
         {/* Informazioni base */}
         <section style={sectionStyle}>
-          <h3>Informazioni Base</h3>
+          <h3 style={{ color: "#333" }}>Informazioni Base</h3> {/* Modificato colore testo per h3 */}
           <div style={{ display: "grid", gap: 12 }}>
+            <input
+              type="text"
+              placeholder="Categoria"
+              value={formData.category}
+              onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+              style={inputStyle}
+            />
+            <input
+              type="text"
+              placeholder="Sottocategoria"
+              value={formData.subcategory}
+              onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+              style={inputStyle}
+            />
             <input
               type="text"
               placeholder="Titolo"
@@ -579,7 +615,7 @@ export default function EditContentPage() {
               }))}
               style={inputStyle}
             />
-            <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, color: "#333" }}> {/* Modificato colore testo per label */}
               <input
                 type="checkbox"
                 checked={formData.isActive}
@@ -626,6 +662,7 @@ const inputStyle: React.CSSProperties = {
   border: "1px solid #ddd",
   borderRadius: 6,
   fontSize: 14,
+  color: "#333", // Aggiunto colore del testo scuro
 };
 
 const addButtonStyle: React.CSSProperties = {
