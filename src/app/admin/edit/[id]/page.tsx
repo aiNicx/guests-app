@@ -36,7 +36,7 @@ export default function EditContentPage() {
     input::placeholder,
     textarea::placeholder,
     select::placeholder {
-      color: #666; /* Un grigio più scuro per i placeholder */
+      color: #555; /* Un grigio più scuro per i placeholder */
       opacity: 1; /* Assicura che il colore sia visibile */
     }
   `;
@@ -247,10 +247,10 @@ export default function EditContentPage() {
       <style dangerouslySetInnerHTML={{ __html: placeholderStyle }} />
       <header style={{ marginBottom: 24 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h1>Modifica Contenuto</h1>
+          <h1 style={{ color: "#333" }}>Modifica Contenuto</h1>
           <Link href="/admin" style={{ color: "#666" }}>← Torna alla Dashboard</Link>
         </div>
-        <p style={{ color: "#333" }}> {/* Modificato colore testo per p */}
+        <p style={{ color: "#333" }}>
           {content.category} / {content.subcategory}
         </p>
       </header>
@@ -305,7 +305,7 @@ export default function EditContentPage() {
 
         {/* Contatti */}
         <section style={sectionStyle}>
-          <h3>Informazioni di Contatto</h3>
+          <h3 style={{ color: "#333" }}>Informazioni di Contatto</h3>
           <div style={{ display: "grid", gap: 12 }}>
             <input
               type="tel"
@@ -353,7 +353,7 @@ export default function EditContentPage() {
         {/* Istruzioni */}
         <section style={sectionStyle}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h3>Istruzioni</h3>
+            <h3 style={{ color: "#333" }}>Istruzioni</h3>
             <button type="button" onClick={addInstruction} style={addButtonStyle}>
               + Aggiungi
             </button>
@@ -381,7 +381,7 @@ export default function EditContentPage() {
         {/* Consigli */}
         <section style={sectionStyle}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h3>Consigli</h3>
+            <h3 style={{ color: "#333" }}>Consigli</h3>
             <button type="button" onClick={addTip} style={addButtonStyle}>
               + Aggiungi
             </button>
@@ -409,7 +409,7 @@ export default function EditContentPage() {
         {/* Link */}
         <section style={sectionStyle}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h3>Link Utili</h3>
+            <h3 style={{ color: "#333" }}>Link Utili</h3>
             <button type="button" onClick={addLink} style={addButtonStyle}>
               + Aggiungi
             </button>
@@ -455,7 +455,7 @@ export default function EditContentPage() {
 
         {/* Prezzi */}
         <section style={sectionStyle}>
-          <h3>Prezzi</h3>
+          <h3 style={{ color: "#333" }}>Prezzi</h3>
           <div style={{ display: "grid", gap: 12 }}>
             <input
               type="text"
@@ -494,7 +494,7 @@ export default function EditContentPage() {
 
         {/* Orari */}
         <section style={sectionStyle}>
-          <h3>Orari e Disponibilità</h3>
+          <h3 style={{ color: "#333" }}>Orari e Disponibilità</h3>
           <div style={{ display: "grid", gap: 12 }}>
             <input
               type="text"
@@ -531,7 +531,7 @@ export default function EditContentPage() {
 
         {/* Posizione */}
         <section style={sectionStyle}>
-          <h3>Posizione</h3>
+          <h3 style={{ color: "#333" }}>Posizione</h3>
           <div style={{ display: "grid", gap: 12 }}>
             <input
               type="text"
@@ -593,7 +593,7 @@ export default function EditContentPage() {
 
         {/* Impostazioni */}
         <section style={sectionStyle}>
-          <h3>Impostazioni</h3>
+          <h3 style={{ color: "#333" }}>Impostazioni</h3>
           <div style={{ display: "grid", gap: 12 }}>
             <input
               type="text"
@@ -615,7 +615,7 @@ export default function EditContentPage() {
               }))}
               style={inputStyle}
             />
-            <label style={{ display: "flex", alignItems: "center", gap: 8, color: "#333" }}> {/* Modificato colore testo per label */}
+            <label style={{ display: "flex", alignItems: "center", gap: 8, color: "#333" }}>
               <input
                 type="checkbox"
                 checked={formData.isActive}
