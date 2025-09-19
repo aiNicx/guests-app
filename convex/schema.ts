@@ -47,4 +47,18 @@ export default defineSchema({
   }).index("by_category", ["category"])
     .index("by_category_subcategory", ["category", "subcategory"])
     .index("by_priority", ["priority"]),
+
+  admin_users: defineTable({
+    email: v.string(),
+    hashedPassword: v.string(),
+    salt: v.string(),
+    iterations: v.number(),
+    role: v.literal("admin"),
+  }).index("by_email", ["email"]),
+
+  admin_sessions: defineTable({
+    userId: v.id("admin_users"),
+    token: v.string(),
+    expiresAt: v.number(), // ms epoch
+  }).index("by_token", ["token"]),
 });
