@@ -164,6 +164,35 @@ export const seedDetailedData = mutation({
         isActive: true,
         priority: 1
       },
+
+      // Esempio per Casa - Check-in / Check-out
+      {
+        category: "Casa",
+        subcategory: "Check-in / Check-out",
+        title: "Check-in e Check-out",
+        description: "Informazioni dettagliate per l'arrivo e la partenza",
+        content: "Ecco tutto quello che dovete sapere per il vostro arrivo e partenza dalla casa. Seguite queste istruzioni per un'esperienza senza problemi.",
+        instructions: [
+          "Arrivo: dalle 15:00 alle 20:00",
+          "Chiavi: troverete le chiavi nella cassetta di sicurezza",
+          "Codice cassetta: vi sarà inviato via WhatsApp il giorno dell'arrivo",
+          "Check-out: entro le 11:00 del giorno di partenza",
+          "Restituzione chiavi: lasciate le chiavi nella cassetta di sicurezza",
+          "Pulizia: lasciate la casa in ordine come l'avete trovata"
+        ],
+        tips: [
+          "Contattateci se avete problemi con la cassetta di sicurezza",
+          "In caso di ritardo, avvisateci con anticipo",
+          "Le chiavi di riserva sono nella cassetta di sicurezza",
+          "Non dimenticate di chiudere tutte le finestre prima di partire"
+        ],
+        contactInfo: {
+          phone: "+39 333 123 4567",
+          email: "info@casa-isola.it"
+        },
+        isActive: true,
+        priority: 2
+      },
       
       // Esempio per Trasporti - Collegamenti bus
       {

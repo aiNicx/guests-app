@@ -45,7 +45,12 @@ export default function SubcategoryDetail() {
   const subcategoryMapping: Record<string, string> = {
     // Casa
     "regole-della-casa": "Regole della casa",
-    "check-in-check-out": "Check-in / Check-out", 
+    "check-in-check-out": "Check-in / Check-out",
+    "checkin-checkout": "Check-in / Check-out",
+    "check-in_check-out": "Check-in / Check-out",
+    "checkin_checkout": "Check-in / Check-out",
+    "check in check out": "Check-in / Check-out",
+    "check-in/check-out": "Check-in / Check-out",
     "regole-generali": "Regole generali",
     
     // Contatti & Emergenze
@@ -70,11 +75,28 @@ export default function SubcategoryDetail() {
   };
 
   // Usa la mappa per ottenere il nome corretto, altrimenti fallback alla conversione automatica
-  const subcategoryName = subcategoryMapping[subcategorySlug] || 
-    subcategorySlug
+  let subcategoryName = subcategoryMapping[subcategorySlug];
+  
+  // Se non trovato nella mappa, prova varianti comuni
+  if (!subcategoryName) {
+    // Prova con underscore invece di trattini
+    const underscoreVariant = subcategorySlug.replace(/-/g, '_');
+    subcategoryName = subcategoryMapping[underscoreVariant];
+  }
+  
+  // Se ancora non trovato, prova con spazi invece di trattini
+  if (!subcategoryName) {
+    const spaceVariant = subcategorySlug.replace(/-/g, ' ');
+    subcategoryName = subcategoryMapping[spaceVariant];
+  }
+  
+  // Se ancora non trovato, usa la conversione automatica
+  if (!subcategoryName) {
+    subcategoryName = subcategorySlug
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  }
 
   // Recupera i dati dal database Convex
   const contentData = useQuery(api.contents.getSubcategoryDetail, {
@@ -86,7 +108,9 @@ export default function SubcategoryDetail() {
   console.log("Searching for:", {
     category: category?.name,
     subcategory: subcategoryName,
-    originalSlug: subcategorySlug
+    originalSlug: subcategorySlug,
+    mappingFound: subcategoryMapping[subcategorySlug] ? true : false,
+    availableMappings: Object.keys(subcategoryMapping)
   });
 
   if (!category) {
