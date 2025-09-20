@@ -462,7 +462,6 @@ export const resultsInfoStyle: React.CSSProperties = {
 
 export const tableContainerStyle: React.CSSProperties = {
   overflowX: "auto",
-  className: "table-container",
 };
 
 export const tableHeaderStyle: React.CSSProperties = {

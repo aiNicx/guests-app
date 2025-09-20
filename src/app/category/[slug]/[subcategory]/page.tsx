@@ -356,6 +356,38 @@ export default function SubcategoryDetail() {
               </div>
             )}
 
+            {/* Immagini */}
+            {contentData.images && contentData.images.length > 0 && (
+              <div className="bg-white rounded-xl shadow-lg p-8">
+                <h3 className="text-xl font-bold text-gray-800 mb-4">
+                  Immagini
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {contentData.images.map((image: string, index: number) => (
+                    <div key={index} className="relative group">
+                      <img 
+                        src={image} 
+                        alt={`${subcategoryName} - Immagine ${index + 1}`}
+                        className="w-full h-48 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                        onError={(e) => {
+                          // Nasconde l'immagine se non si carica
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg flex items-center justify-center">
+                        <button 
+                          onClick={() => window.open(image, '_blank')}
+                          className="opacity-0 group-hover:opacity-100 bg-white bg-opacity-90 text-gray-800 px-3 py-1 rounded-full text-sm font-medium transition-all duration-300 hover:bg-opacity-100"
+                        >
+                          Visualizza
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Link utili */}
             {contentData.links && contentData.links.length > 0 && (
               <div className="bg-white rounded-xl shadow-lg p-8">

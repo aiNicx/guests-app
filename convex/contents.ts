@@ -1,15 +1,49 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
 
+// Helper function per convertire ID file Convex in URL
+async function convertImageIdsToUrls(ctx: any, images: string[] | undefined): Promise<string[]> {
+  if (!images || images.length === 0) return [];
+  
+  const imageUrls = await Promise.all(
+    images.map(async (imageId) => {
+      // Se è un ID Convex (inizia con caratteri alfanumerici), convertilo in URL
+      if (imageId.match(/^[a-zA-Z0-9]+$/)) {
+        try {
+          const url = await ctx.storage.getUrl(imageId as any);
+          return url || imageId; // Fallback all'ID originale se non riesce a generare l'URL
+        } catch (error) {
+          console.error("Errore nel generare URL per file:", imageId, error);
+          return imageId; // Fallback all'ID originale
+        }
+      }
+      // Se è già un URL, restituiscilo così com'è
+      return imageId;
+    })
+  );
+  
+  return imageUrls;
+}
+
 export const getSubcategories = query({
   args: { category: v.string() },
   handler: async (ctx, args) => {
-    return await ctx.db
+    const contents = await ctx.db
       .query("contents")
       .withIndex("by_category", (q) => q.eq("category", args.category))
       .filter((q) => q.eq(q.field("isActive"), true))
       .order("asc")
       .collect();
+    
+    // Converti le immagini per ogni contenuto
+    const contentsWithImages = await Promise.all(
+      contents.map(async (content) => ({
+        ...content,
+        images: await convertImageIdsToUrls(ctx, content.images)
+      }))
+    );
+    
+    return contentsWithImages;
   },
 });
 
@@ -19,23 +53,43 @@ export const getSubcategoryDetail = query({
     subcategory: v.string()
   },
   handler: async (ctx, args) => {
-    return await ctx.db
+    const content = await ctx.db
       .query("contents")
       .withIndex("by_category_subcategory", (q) => 
         q.eq("category", args.category).eq("subcategory", args.subcategory)
       )
       .first();
+    
+    if (!content) return null;
+    
+    // Converti gli ID dei file Convex in URL se presenti
+    const images = await convertImageIdsToUrls(ctx, content.images);
+    
+    return {
+      ...content,
+      images
+    };
   },
 });
 
 export const getAllContents = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db
+    const contents = await ctx.db
       .query("contents")
       .filter((q) => q.eq(q.field("isActive"), true))
       .order("asc")
       .collect();
+    
+    // Converti le immagini per ogni contenuto
+    const contentsWithImages = await Promise.all(
+      contents.map(async (content) => ({
+        ...content,
+        images: await convertImageIdsToUrls(ctx, content.images)
+      }))
+    );
+    
+    return contentsWithImages;
   },
 });
 
@@ -301,6 +355,19 @@ export const activateAllContents = mutation({
     }
     
     return { message: `Attivati ${updated} contenuti`, total: allContents.length };
+  },
+});
+
+export const updateContentImages = mutation({
+  args: {
+    contentId: v.id("contents"),
+    images: v.array(v.string()),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.contentId, {
+      images: args.images,
+    });
+    return { success: true };
   },
 });
 

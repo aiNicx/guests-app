@@ -112,6 +112,7 @@ export default function CategoryDetail() {
               key={index} 
               subcategory={sub.subcategory}
               categorySlug={slug}
+              contentData={sub}
             />
           )) || (
             <div className="col-span-full text-center py-8">
@@ -126,10 +127,12 @@ export default function CategoryDetail() {
 
 function SubcategoryCard({ 
   subcategory, 
-  categorySlug 
+  categorySlug,
+  contentData
 }: { 
   subcategory: string;
   categorySlug: string;
+  contentData?: any;
 }) {
   const router = useRouter();
 
@@ -148,29 +151,48 @@ function SubcategoryCard({
       onClick={handleClick}
       className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 cursor-pointer hover:scale-105"
     >
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
-            {subcategory}
-          </h3>
-          <p className="text-sm text-gray-600">
-            Clicca per vedere i dettagli
-          </p>
-        </div>
-        <div className="text-blue-600">
-          <svg 
-            className="w-6 h-6" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M9 5l7 7-7 7" 
-            />
-          </svg>
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          {/* Immagine se presente */}
+          {contentData?.images && contentData.images.length > 0 && (
+            <div className="mb-4 flex justify-center">
+              <img 
+                src={contentData.images[0]} 
+                alt={subcategory}
+                className="max-w-full max-h-32 object-contain rounded-lg"
+                onError={(e) => {
+                  // Nasconde l'immagine se non si carica
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            </div>
+          )}
+          
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                {subcategory}
+              </h3>
+              <p className="text-sm text-gray-600">
+                Clicca per vedere i dettagli
+              </p>
+            </div>
+            <div className="text-blue-600 ml-4">
+              <svg 
+                className="w-6 h-6" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M9 5l7 7-7 7" 
+                />
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     </div>
